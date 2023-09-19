@@ -3,7 +3,7 @@ Cars Driving Cars is a project that promotes reflection about car use by extract
 This repository contains scripts to (1) Read car data through OBD2 and transmit it via MQTT. (2) Generate drawings of cars based on trip data and (3) Receive car data on an 
 ESP32 board and us it to drive toy cars. 
 
-![banner](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/1cf89fcf-7a39-448d-9921-31a1c5493876)
+![carGrid](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/4394ea0f-af37-424d-8104-115e859d312d)
 
 # Extracting car data
 Realtime car data can be extracted using ELM327 OBD2 compatible readers. The code in this project has been tested using a USB reader connected to a Raspberry Pi Zero W.
@@ -37,10 +37,23 @@ Make sure to use the same ```--carID``` or ```-c``` argument as when running obd
 
 MQTT broker address and port are hardcoded in this file.
 
+# Interactive visualisation
+There is a P5.js enabled visualisation within the interactive folder. This reads geometry points from a JSON file. This geometry matches the generated
+svg files and interpolates between different graphics depending on the mouse's x-position. To run it use a local server (such as LAMP, WAMP, MAMP) or
+an IDE with live HTML/JS view (such as brackets).
+
+![interactiveStill](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/580b5794-b2e8-42a3-847f-554b60b64380)
+
 # Driving toy cars (and other electronics)
 To control toy cars on electric tracks using a real car's accelerator pedal position (or any other parameter) refer to __trackControl.ino__. This program
-is meant to be loaded to an ESP32 board and uses data received through MQTT from __obd2mqtt.py__ to set PWM frequencies on pins 4 and 5. Ideally these 
-signals drive transistors or MOSFETS connected to the toy racetrack (or other DC electronics) to control the cars' speed.
+is meant to be loaded to an ESP32 board through the Arduino IDE and uses data received through MQTT from __obd2mqtt.py__ to set PWM frequencies on pins 4 and 5. Ideally these 
+signals drive transistors or MOSFETS connected to the toy racetrack (or other DC electronics) to control the cars' speed. The following schematic should
+provide some guidance:
+
+![schematic](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/c3724ccc-aa27-4ef2-b2a2-0af9492af606)
+
+The circuit connected to an electric race track should look something like this:
+![circuitWeb](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/dd1b7a22-eebb-45ee-bd89-e5893f084d17)
 
 This program can subscribe to two different carIDs to drive two separete channels. WiFi credentials, carIDs, MQTT broker address and port are all
 hardcoded and need to be filled in before uploading the program.
