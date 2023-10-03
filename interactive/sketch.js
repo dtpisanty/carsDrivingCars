@@ -12,7 +12,7 @@ function preload() {
 
 function setup() {
     // Create canvas and asign DOM variables
-    var canvas=createCanvas(800,400);
+    let canvas=createCanvas(800,400);
     canvas.parent('canvas');
     dateP=select("#date");
 }
@@ -64,7 +64,7 @@ function draw() {
         //Draw base
         fill('black');
         noStroke();
-        rect.apply(this,cars[0].base);
+        rect(cars[0].base[0]-6,cars[0].base[1],cars[0].base[2]+15,cars[0].base[3]);
         //Calculate fill colour interpolation
         var fills=[color(cars[idx-1].fill),color(cars[idx].fill)];
         var gVal=lerp(fills[0].levels[1],fills[1].levels[1],amount);
@@ -97,13 +97,35 @@ function draw() {
                 lerp(cars[idx-1].quad[6],cars[idx].quad[6],amount),
                 lerp(cars[idx-1].quad[7],cars[idx].quad[7],amount),
                 ];
+
+        //Windshield x=my+c
+        const topMargin=(lerp(cars[idx-1].quad[7],cars[idx].quad[7],amount)-lerp(cars[idx-1].quad[1],cars[idx].quad[1],amount))/10;
+        const m0=(lerp(cars[idx-1].quad[6]+12,cars[idx].quad[6]+12,amount)-lerp(cars[idx-1].quad[0]+12,cars[idx].quad[0]+12,amount))/
+                        (lerp(cars[idx-1].quad[7],cars[idx].quad[7],amount)-lerp(cars[idx-1].quad[1],cars[idx].quad[1],amount));
+        const c0=lerp(cars[idx-1].quad[0]+12,cars[idx].quad[0]+12,amount)-(m0*lerp(cars[idx-1].quad[1],cars[idx].quad[1],amount));
+        const m1=(lerp(cars[idx-1].quad[4]-20,cars[idx].quad[4]-20,amount)-lerp(cars[idx-1].quad[2]-20,cars[idx].quad[2]-20,amount))/
+                        (lerp(cars[idx-1].quad[5],cars[idx].quad[5],amount)-lerp(cars[idx-1].quad[3],cars[idx].quad[3],amount));
+        const c1=lerp(cars[idx-1].quad[2]-20,cars[idx].quad[2]-20,amount)-(m1*lerp(cars[idx-1].quad[3],cars[idx].quad[3],amount));
+        
+        var windshield=[m0*(lerp(cars[idx-1].quad[1]+topMargin,cars[idx].quad[1]+topMargin,amount))+c0,
+                lerp(cars[idx-1].quad[1]+topMargin,cars[idx].quad[1]+topMargin,amount),
+                m1*(lerp(cars[idx-1].quad[3]+topMargin,cars[idx].quad[3]+topMargin,amount))+c1,
+                lerp(cars[idx-1].quad[3]+topMargin,cars[idx].quad[3]+topMargin,amount),
+                m1*(lerp(cars[idx-1].quad[5]-(cars[idx-1].quad[5]-cars[idx-1].quad[1])/2,cars[idx].quad[5]-(cars[idx].quad[5]-cars[idx].quad[1])/2,amount))+c1,
+                lerp(cars[idx-1].quad[5]-(cars[idx-1].quad[5]-cars[idx-1].quad[1])/2,cars[idx].quad[5]-(cars[idx].quad[5]-cars[idx].quad[1])/2,amount),
+                m0*(lerp(cars[idx-1].quad[7]-(cars[idx-1].quad[7]-cars[idx-1].quad[1])/2,cars[idx].quad[7]-(cars[idx].quad[7]-cars[idx].quad[1])/2,amount))+c0,
+                lerp(cars[idx-1].quad[7]-(cars[idx-1].quad[7]-cars[idx-1].quad[1])/2,cars[idx].quad[7]-(cars[idx].quad[7]-cars[idx].quad[1])/2,amount)
+                ];
+
         //Draw geometry
         triangle.apply(this,back)
         quad.apply(this,middle)
         quad.apply(this,front)
+        fill('white');
+        // noStroke();
+        quad.apply(this,windshield)
         pop();
-        fill('black');
-        noStroke();
+
         //Adjust date to Mexico City timezone (UTC-6)
         const dateTime=new Date(cars[idx].timestamp.substring(0,4)+"-"+cars[idx].timestamp.substring(4,6)+"-"+cars[idx].timestamp.substring(6,8)+" "+cars[idx].timestamp.substring(8,10)+":"+cars[idx].timestamp.substring(10,12));
         dateTime.setHours(dateTime.getHours()-6);
