@@ -41,8 +41,7 @@ MQTT broker address and port are hardcoded in this file.
 There is a P5.js enabled visualisation within the interactive folder. This reads geometry points from a JSON file. This geometry matches the generated
 svg files and interpolates between different graphics depending on the mouse's x-position. To run it use a local server (such as LAMP, WAMP, MAMP) or
 an IDE with live HTML/JS view (such as brackets).
-
-![interactiveStill](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/580b5794-b2e8-42a3-847f-554b60b64380)
+![interactiveStill](https://github.com/dtpisanty/carsDrivingCars/assets/57118670/fa1dc401-6dae-4a41-a8e5-c40192f307c6)
 
 # Driving toy cars (and other electronics)
 To control toy cars on electric tracks using a real car's accelerator pedal position (or any other parameter) refer to __trackControl.ino__. This program
